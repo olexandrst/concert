@@ -1,0 +1,21 @@
+{
+  "v": 3,
+  "createdOnFiles": { "v": 1, "at": "2026-09-29T12:00:00Z" },
+  "title": "Кабінет студента",
+  "launch": { "view": "focused", "file": "Main.dc.html" },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": { "x": 0, "y": 0, "w": 1440, "h": 900, "title": "Кабінет студента", "expand": "fill", "is_interactive": true }
+  },
+  "order": ["Main.dc.html"],
+  "notes": {},
+  "designSystems": [
+    {
+      "title": "Metinvest Digital",
+      "namespace": "metinvest-digital",
+      "artifact": "https://claude.ai/code/artifact/6a75d19b-1442-4f0c-b65b-74e0523bda6d",
+      "version": "1790681016-2594",
+      "copiedAt": "2026-09-29T12:00:00Z"
+    }
+  ]
+}

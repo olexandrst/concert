@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>Кабінет студента</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+body{margin:0;font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:#f3f4f8;color:#1a1a2e}
+button,input{font-family:inherit}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid #1a1a2e;outline-offset:2px}
+a{color:#e30613}a:hover{color:#bd0511}
+.nav{border:0;cursor:pointer;height:40px;padding:0 16px;border-radius:9999px;background:transparent;color:#51515f;font-size:14px;line-height:20px;font-weight:500;white-space:nowrap}
+.nav:hover{background:#ffffff}
+.nav.on{background:linear-gradient(135deg,#e30613,#bd0511);color:#ffffff;box-shadow:0 6px 16px rgba(227,6,19,0.35)}
+.iconbtn{position:relative;width:44px;height:44px;border:0;border-radius:50%;background:#ffffff;color:#1a1a2e;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 24px rgba(26,26,46,0.1)}
+.iconbtn:hover{background:#eaeaed}
+.userchip{display:flex;align-items:center;gap:10px;height:44px;padding:0 16px 0 4px;border:0;border-radius:9999px;background:#ffffff;cursor:pointer;color:#1a1a2e;font-size:14px;font-weight:600;box-shadow:0 2px 24px rgba(26,26,46,0.1)}
+.userchip:hover{background:#eaeaed}
+.btn{height:48px;padding:0 24px;border:0;border-radius:12px;background:linear-gradient(135deg,#e30613,#bd0511);color:#ffffff;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 6px 16px rgba(227,6,19,0.35);white-space:nowrap}
+.btn:active{background:#bd0511}
+.btn-ghost{height:44px;padding:0 20px;border:1px solid #ebecef;border-radius:12px;background:#ffffff;color:#1a1a2e;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn-ghost:hover{background:#eaeaed}
+.day{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:100px;height:80px;border:0;border-radius:16px;background:#ffffff;color:#1a1a2e;cursor:pointer;box-shadow:0 2px 24px rgba(26,26,46,0.1)}
+.day .a{font-size:12px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:#4b5563}
+.day .b{font-size:22px;line-height:28px;font-weight:700}
+.day .c{font-size:11px;font-weight:600;color:#6b7280}
+.day.on{background:linear-gradient(135deg,#e30613,#bd0511);box-shadow:0 6px 16px rgba(227,6,19,0.35)}
+.day.on .a,.day.on .c{color:#ffffff}
+.day:hover{background:#eaeaed}
+.day.on:hover{background:linear-gradient(135deg,#e30613,#bd0511)}
+.chipbtn{height:40px;padding:0 20px;border:0;border-radius:9999px;background:#ffffff;color:#51515f;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 2px 24px rgba(26,26,46,0.1)}
+.chipbtn:hover{background:#eaeaed}
+.chipbtn.on{background:linear-gradient(135deg,#e30613,#bd0511);color:#ffffff;box-shadow:0 6px 16px rgba(227,6,19,0.35)}
+.pill{display:inline-flex;align-items:center;justify-content:center;height:26px;padding:0 12px;border-radius:9999px;font-size:12px;line-height:16px;font-weight:600;white-space:nowrap}
+.pill-dark{background:#1a1a2e;color:#ffffff}
+.pill-brand{background:linear-gradient(135deg,#e30613,#bd0511);color:#ffffff}
+.pill-neutral{background:#eaeaed;color:#1a1a2e}
+.pill-line{background:#ffffff;color:#4b5563;border:1px solid #ebecef}
+.tile-tint{background:#f9e3e5;color:#e30613}
+.tile-neutral{background:#eaeaed;color:#1a1a2e}
+.tile-brand{background:linear-gradient(135deg,#e30613,#bd0511);color:#ffffff}
+.tile-dark{background:linear-gradient(135deg,#22222a,#0d0d12);color:#ffffff}
+.tile-graphite{background:linear-gradient(135deg,#4d4d5a,#3c3c45);color:#ffffff}
+.field{width:100%;box-sizing:border-box;height:60px;padding:0 20px;border:1px solid #ebecef;border-radius:16px;background:#ffffff;color:#1a1a2e;font-size:15px}
+.field::placeholder{color:#6b7280}
+</style>
+</helmet>
+<div style="width:100%;min-height:900px;box-sizing:border-box;position:relative;font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:#1a1a2e;background:radial-gradient(circle at 100% 100%, rgba(227,6,19,0.08), rgba(227,6,19,0) 45%), linear-gradient(135deg,#f3f4f8,#dfe0e6)">
+
+<!-- ================= ВХІД ================= -->
+<sc-if value="{{loggedOut}}" hint-placeholder-val="{{ true }}">
+<div style="min-height:900px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;padding:48px 24px">
+<div style="width:100%;max-width:1120px;display:flex;flex-wrap:wrap;gap:24px;align-items:stretch">
+
+<section style="flex:1.2 1 480px;box-sizing:border-box;border-radius:32px;background-color:#eceef2;background-image:radial-gradient(#cfd2da 1.5px, transparent 1.5px);background-size:24px 24px;padding:48px;display:flex;flex-direction:column;gap:24px;justify-content:space-between">
+<div style="display:flex;align-items:center;gap:12px">
+<div class="tile-dark" style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;letter-spacing:0.02em">ПД</div>
+<div style="display:flex;flex-direction:column;gap:2px">
+<div style="font-size:16px;line-height:20px;font-weight:700;color:#1a1a2e">Політех-Дніпро</div>
+<div style="font-size:11px;line-height:14px;font-weight:500;letter-spacing:0.08em;color:#51515f">КАБІНЕТ СТУДЕНТА</div>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;align-items:flex-start">
+<div style="display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 14px;border-radius:9999px;background:#ffffff;box-shadow:0 2px 24px rgba(26,26,46,0.1);font-size:12px;font-weight:500;color:#4b5563"><span style="width:8px;height:8px;border-radius:50%;background:#e30613"></span>Навчальний рік 2026/27</div>
+<h1 style="margin:0;font-size:52px;line-height:56px;font-weight:800;letter-spacing:-0.02em;color:#1a1a2e">Кабінет студента <span style="color:#e30613">Політех-Дніпро</span></h1>
+<p style="margin:0;font-size:16px;line-height:28px;color:#4b5563;max-width:520px">Розклад занять, оцінки, дисципліни семестру, оплата навчання та довідки — усе, що потрібно студенту, в одному місці.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:12px;font-size:15px;color:#1a1a2e;font-weight:500">
+<span class="tile-brand" style="width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v16H4zM4 10h16M8 3v4M16 3v4"></path></svg></span>Розклад занять на кожен день</div>
+<div style="display:flex;align-items:center;gap:12px;font-size:15px;color:#1a1a2e;font-weight:500">
+<span class="tile-dark" style="width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"></path></svg></span>Успішність і поточні бали</div>
+<div style="display:flex;align-items:center;gap:12px;font-size:15px;color:#1a1a2e;font-weight:500">
+<span class="tile-brand" style="width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4M3 5v14a2 2 0 0 0 2 2h16v-5M18 12a2 2 0 0 0 0 4h4v-4z"></path></svg></span>Оплата навчання та довідки онлайн</div>
+</div>
+</section>
+
+<section style="flex:1 1 400px;box-sizing:border-box;border-radius:24px;background:#fafafd;box-shadow:0 2px 24px rgba(26,26,46,0.1);padding:48px 40px;display:flex;flex-direction:column;justify-content:center;gap:24px">
+<div style="display:flex;flex-direction:column;gap:8px">
+<h2 style="margin:0;font-size:24px;line-height:32px;font-weight:700;color:#1a1a2e">Вхід до кабінету</h2>
+<p style="margin:0;font-size:15px;line-height:22px;color:#51515f">Увійдіть за логіном і паролем від університетського облікового запису.</p>
+</div>
+<form onSubmit="{{login}}" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-direction:column;gap:8px">
+<label for="login" style="font-size:14px;line-height:20px;font-weight:600;color:#1a1a2e">Логін</label>
+<input class="field" id="login" name="login" type="text" autocomplete="username" placeholder="Ел. пошта або студентський номер">
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<label for="password" style="font-size:14px;line-height:20px;font-weight:600;color:#1a1a2e">Пароль</label>
+<input class="field" id="password" name="password" type="password" autocomplete="current-password" placeholder="Ваш пароль">
+</div>
+<button class="btn" type="submit" style="height:52px;width:100%;font-size:16px">Увійти</button>
+</form>
+<div style="display:flex;gap:12px;align-items:flex-start;padding:16px;border-radius:16px;background:#ffffff;border:1px solid #ebecef">
+<span style="flex:none;margin-top:6px;width:8px;height:8px;border-radius:50%;background:#e30613"></span>
+<p style="margin:0;font-size:14px;line-height:22px;color:#4b5563">Це прототип: підійде будь-яка пара логіну й пароля, навіть порожня.</p>
+</div>
+</section>
+
+</div>
+</div>
+</sc-if>
+
+<!-- ================= КАБІНЕТ ================= -->
+<sc-if value="{{authed}}" hint-placeholder-val="{{ false }}">
+<div style="width:100%;max-width:1200px;margin:0 auto;box-sizing:border-box;padding:24px 24px 48px">
+
+<!-- шапка -->
+<header style="position:relative;height:76px;box-sizing:border-box;padding:0 16px 0 20px;border-radius:24px;background:#fafafd;box-shadow:0 8px 32px rgba(26,26,46,0.08);display:flex;align-items:center;justify-content:space-between;gap:16px">
+<div style="display:flex;align-items:center;gap:12px;flex:none">
+<div class="tile-dark" style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;letter-spacing:0.02em">ПД</div>
+<div style="display:flex;flex-direction:column;gap:2px">
+<div style="font-size:16px;line-height:20px;font-weight:700;color:#1a1a2e">Політех-Дніпро</div>
+<div style="font-size:11px;line-height:14px;font-weight:500;letter-spacing:0.08em;color:#51515f">КАБІНЕТ СТУДЕНТА</div>
+</div>
+</div>
+<nav aria-label="Розділи кабінету" style="display:flex;align-items:center;gap:4px">
+<sc-for list="{{nav}}" as="n" hint-placeholder-count="6">
+<button class="{{n.cls}}" type="button" aria-current="{{n.current}}" onClick="{{n.go}}">{{n.label}}</button>
+</sc-for>
+</nav>
+<div style="display:flex;align-items:center;gap:8px;flex:none">
+<button class="iconbtn" type="button" aria-label="Сповіщення" onClick="{{toggleNotif}}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+<span style="position:absolute;top:-2px;right:-2px;min-width:18px;height:18px;box-sizing:border-box;padding:0 4px;border-radius:9999px;background:#e30613;color:#ffffff;font-size:11px;line-height:18px;font-weight:600;text-align:center">{{newsCount}}</span>
+</button>
+<button class="userchip" type="button" aria-label="Відкрити профіль" onClick="{{goProfile}}">
+<span class="tile-brand" style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">ДМ</span>Данило
+</button>
+<button class="iconbtn" type="button" aria-label="Вийти" onClick="{{logout}}">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"></path></svg>
+</button>
+</div>
+
+<sc-if value="{{notif}}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;top:88px;right:0;z-index:20;width:380px;max-width:100%;box-sizing:border-box;padding:20px;border-radius:24px;background:#ffffff;box-shadow:0 8px 32px rgba(26,26,46,0.16);display:flex;flex-direction:column;gap:4px">
+<div style="font-size:17px;line-height:24px;font-weight:700;color:#1a1a2e;padding-bottom:8px">Сповіщення</div>
+<sc-for list="{{news}}" as="nw" hint-placeholder-count="4">
+<div style="display:flex;flex-direction:column;gap:2px;padding:12px 0;border-top:1px solid #ebecef">
+<div style="font-size:11px;line-height:16px;font-weight:600;color:#6b7280">{{nw.date}}</div>
+<div style="font-size:14px;line-height:20px;font-weight:600;color:#1a1a2e">{{nw.title}}</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</header>
+
+<main style="margin-top:40px;display:flex;flex-direction:column;gap:24px">
+
+<!-- ---------- ГОЛОВНА ---------- -->
+<sc-if value="{{tabHome}}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:24px">
+
+<section style="border-radius:32px;background-color:#eceef2;background-image:radial-gradient(#cfd2da 1.5px, transparent 1.5px);background-size:24px 24px;padding:40px 48px;display:flex;flex-direction:column;gap:16px;align-items:flex-start">
+<div style="display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 14px;border-radius:9999px;background:#ffffff;box-shadow:0 2px 24px rgba(26,26,46,0.1);font-size:12px;font-weight:500;color:#4b5563"><span style="width:8px;height:8px;border-radius:50%;background:#e30613"></span>Осінній семестр 2026/27 · 5-й семестр</div>
+<h1 style="margin:0;font-size:44px;line-height:52px;font-weight:800;letter-spacing:-0.02em;color:#0d0d12">Вітаємо, <span style="color:#e30613">Данило</span></h1>
+<p style="margin:0;font-size:16px;line-height:28px;color:#4b5563;max-width:720px">Сьогодні вівторок, 29 вересня: три пари, перша починається о 08:30. Найближчий дедлайн — лабораторна з баз даних, 2 жовтня.</p>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<span class="pill pill-line">3 курс</span>
+<span class="pill pill-line">Група КН-34</span>
+<span class="pill pill-line">122 Комп'ютерні науки</span>
+<span class="pill pill-line">Денна форма · контракт</span>
+</div>
+</section>
+
+<div style="display:grid;grid-template-columns:repeat(4, minmax(0, 1fr));gap:24px">
+<sc-for list="{{stats}}" as="st" hint-placeholder-count="4">
+<div style="background:#fafafd;border-radius:20px;box-shadow:0 2px 24px rgba(26,26,46,0.1);padding:24px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center">
+<div class="{{st.tone}}" style="width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{st.icon}}"></path></svg>
+</div>
+<div style="font-size:38px;line-height:44px;font-weight:700;color:#1a1a2e">{{st.value}}</div>
+<div style="font-size:14px;line-height:20px;color:#6b7280">{{st.label}}</div>
+</div>
+</sc-for>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:stretch">
+<section style="flex:1.5 1 560px;box-sizing:border-box;background:#fafafd;border-radius:24px;box-shadow:0 2px 24px rgba(26,26,46,0.1);padding:24px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:8px">
+<h2 style="margin:0;font-size:24px;line-height:32px;font-weight:600;color:#1a1a2e">Розклад на сьогодні</h2>
+<span class="pill pill-neutral">Вівторок, 29 вересня</span>
+</div>
+<sc-for list="{{todayClasses}}" as="c" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:16px;padding:16px 0;border-top:1px solid #ebecef">
+<div style="width:64px;flex:none">
+<div style="font-size:17px;line-height:24px;font-weight:700;color:#1a1a2e">{{c.s}}</div>
+<div style="font-size:13px;line-height:18px;color:#6b7280">{{c.e}}</div>
+</div>
+<div style="flex-grow:1;min-width:0">
+<div style="font-size:17px;line-height:24px;font-weight:700;color:#1a1a2e">{{c.subject}}</div>
+<div style="font-size:14px;line-height:22px;color:#51515f">{{c.meta}}</div>
+</div>
+<span class="{{c.pillCls}}">{{c.kind}}</span>
+</div>
+</sc-for>
+<div style="padding-top:8px"><button class="btn-ghost" type="button" onClick="{{goSchedule}}">Увесь розклад</button></div>
+</section>
+
+<section style="flex:1 1 340px;box-sizing:border-box;background:#fafafd;border-radius:24px;box-shadow:0 2px 24px rgba(26,26,46,0.1);padding:24px;display:flex;flex-direction:column;gap:8px">
+<h2 style="margin:0;font-size:24px;line-height:32px;font-weight:600;color:#1a1a2e;padding-bottom:8px">Найближчі дедлайни</h2>
+<sc-for list="{{deadlines}}" as="d" hint-placeholder-count="4">
+<div style="display:flex;align-items:center;gap:16px;padding:14px 0;border-top:1px solid #ebecef">
+<div class="{{d.tone}}" style="width:52px;height:52px;flex:none;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+<span style="font-size:19px;line-height:22px;font-weight:700">{{d.day}}</span>
+<span style="font-size:11px;line-height:14px;font-weight:600">{{d.month}}</span>
+</div>
+<div style="min-width:0">
+<div style="font-size:15px;line-height:20px;font-weight:600;color:#1a1a2e">{{d.title}}</div>
+<div style="font-size:14px;line-height:22px;color:#51515f">{{d.sub}}</div>
+</div>
+</div>
+</sc-for>
+</section>
+</div>
+
+<section style="background:#fafafd;border-radius:24px;box-shadow:0 2px 24px rgba(26,26,46,0.1);padding:24px;display:flex;flex-direction:column;gap:16px">
+<h2 style="margin:0;font-size:24px;line-height:32px;font-weight:600;color:#1a1a2e">Оголошення</h2>
+<div style="display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:16px">
+<sc-for list="{{news}}" as="nw" hint-placeholder-count="4">
+<div style="background:#ffffff;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:8px">
+<div style="font-size:11px;line-height:16px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#6b7280">{{nw.date}}</div>
+<div style="font-size:17px;line-height:24px;font-weight:700;color:#1a1a2e">{{nw.title}}</div>
+<div style="font-size:14px;line-height:22px;color:#51515f">{{nw.text}}</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+</div>
+</sc-if>
+
+<!-- ---------- РОЗКЛАД ---------- -->
+<sc-if value="{{tabSchedule}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+<h1 style="margin:0;font-size:34px;line-height:42px;font-weight:700;letter-spacing:-0.01em;color:#e30613">Розклад занять</h1>
+<p style="margin:0;font-size:16px;line-height:24px;color:#51515f">Тиждень 28 вересня – 2 жовтня · Осінній семестр 2026/27</p>
+</div>
+<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px">
+<sc-for list="{{days}}" as="dy" hint-placeholder-count="5">
+<button class="{{dy.cls}}" type="button" onClick="{{dy.pick}}"><span class="a">{{dy.wd}}</span><span class="b">{{dy.date}}</span><span class="c">{{dy.count}}</span></button>
+</sc-for>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<section style="flex:2 1 560px;box-sizing:border-box;background:#fafafd;border-radius:24px;box-shadow:0 2px 24px rgba(26,26,46,0.1);padding:24px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:8px">
+<h2 style="margin:0;font-size:24px;line-height:32px;font-weight:600;color:#1a1a2e">{{dayTitle}}</h2>
+<sc-if value="{{dayIsToday}}" hint-placeholder-val="{{ true }}"><span class="pill pill-brand">Сьогодні</span></sc-if>
+</div>
+<sc-for list="{{dayClasses}}" as="c" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:16px;padding:18px 0;border-top:1px solid #ebecef">
+<div style="width:52px;height:52px;flex:none;border-radius:16px;background:#eaeaed;color:#1a1a2e;display:flex;flex-direction:column;align-items:center;justify-content:center">
+<span style="font-size:19px;line-height:22px;font-weight:700">{{c.n}}</span>
+<span style="font-size:11px;line-height:14px;font-weight:600">пара</span>
+</div>
+<div style="width:64px;flex:none">
+<div style="font-size:17px;line-height:24px;font-weight:700;color:#1a1a2e">{{c.s}}</div>
+<div style="font-size:13px;line-height:18px;color:#6b7280">{{c.e}}</div>
+</div>
+<div style="flex-grow:1;min-width:0">
+<div style="font-size:17px;line-height:24px;font-weight:700;color:#1a1a2e">{{c.subject}}</div>
+<div style="font-size:14px;line-height:22px;color:#51515f">{{c.teacher}} · ауд. {{c.room}}</div>
+</div>
+<span class="{{c.pillCls}}">{{c.kind}}</span>
+</div>
+</sc-for>
+<sc-if value="{{dayEmpty}}" hint-placeholder-val="{{ false }}">
+<div style="padding:24px 0;border-top:1px solid #ebecef;font-size:15px;line-height:22px;color:#51515f">Занять немає.</div>
+</sc-if>
+</section>
+<section style="flex:1 1 300px;box-sizing:border-box;background:#fafafd;border-radius:24px;box-shadow:0 2px 24px rgba(26,26,46,0.1);padding:24px;display:flex;flex-direction:column;gap:8px">
+<h2 style="margin:0;font-size:24px;line-height:32px;font-weight:600;color:#1a1a2e;padding-bottom:8px">Розклад дзвінків</h2>
+<sc-for list="{{bells}}" as="b" hint-placeholder-count="5">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid #ebecef">
+<span style="font-size:15px;line-height:20px;font-weight:600;color:#1a1a2e">{{b.n}} пара</span>
+<span style="font-size:15px;line-height:20px;color:#51515f">{{b.s}} – {{b.e}}</span>
+</div>
+</sc-for>
+</section>
+</div>
+</div>
+</sc-if>
+
+<!-- ---------- УСПІШНІСТЬ ---------- -->
+<sc-if value="{{tabGrades}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+<h1 style="margin:0;font-size:34px;line-height:42px;font-weight:700;letter-spacing:-0.01em;color:#e30613">Успішність</h1>
+<p style="margin:0;font-size:16px;line-height:24px;color:#51515f">Оцінки за 100-бальною шкалою та шкалою ECTS за завершені семестри</p>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:24px">
+<sc-for list="{{gstats}}" as="st" hint-placeholder-count="3">
+<div style="background:#fafafd;border-radius:20px;box-shadow:0 2px 24px rgba(26,26,46,0.1);padding:24px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center">
+<div class="{{st.tone}}" style="width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{st.icon}}"></path></svg>
+</div>
+<div style="font-size:38px;line-height:44px;font-weight:700;color:#1a1a2e">{{st.value}}</div>
+<div style="font-size:14px;line-height:20px;color:#6b7280">{{st.label}}</div>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px">
+<sc-for list="{{sems}}" as="sm" hint-placeholder-count="4">
+<button class="{{sm.cls}}" type="button" onClick="{{sm.pick}}">{{sm.label}}</button>
+</sc-for>
+</div>
+<section style="background:#fafafd;border-radius:24px;box-shadow:0 2px 24px rgba(26,26,46,0.1);padding:24px;display:flex;flex-direction:column;gap:8px;overflow-x:auto">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-bottom:8px">
+<h2 style="margin:0;font-size:24px;line-height:32px;font-weight:600;color:#1a1a2e">{{semTitle}}</h2>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><span class="pill pill-neutral">Середній бал {{semAvg}}</span><span class="pill pill-neutral">{{semCredits}} кредитів</span></div>
+</div>
+<div style="min-width:640px;display:grid;grid-template-columns:minmax(0,1fr) 84px 84px 72px 64px 128px;gap:16px;align-items:center;padding:8px 0;font-size:12px;line-height:16px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#4b5563">
+<span>Дисципліна</span><span>Контроль</span><span>Кредити</span><span>Бал</span><span>ECTS</span><span>Оцінка</span>
+</div>
+<sc-for list="{{semRows}}" as="r" hint-placeholder-count="6">
+<div style="min-width:640px;display:grid;grid-template-columns:minmax(0,1fr) 84px 84px 72px 64px 128px;gap:16px;align-items:center;padding:14px 0;border-top:1px solid #ebecef">
+<span style="font-size:15px;line-height:22px;font-weight:600;color:#1a1a2e">{{r.name}}</span>
+<span style="font-size:14px;line-height:22px;color:#51515f">{{r.ctrl}}</span>
+<span style="font-size:14px;line-height:22px;color:#51515f">{{r.cr}}</span>
+<span class="{{r.pillCls}}">{{r.score}}</span>
+<span style="font-size:15px;line-height:22px;font-weight:700;color:#1a1a2e">{{r.l}}</span>
+<span style="font-size:14px;line-height:22px;color:#51515f">{{r.w}}</span>
+</div>
+</sc-for>
+</section>
+</div>
+</sc-if>
+
+<!-- ---------- ДИСЦИПЛІНИ ---------- -->
+<sc-if value="{{tabCourses}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+<h1 style="margin:0;font-size:34px;line-height:42px;font-weight:700;letter-spacing:-0.01em;color:#e30613">Дисципліни семестру</h1>
+<p style="margin:0;font-size:16px;line-height:24px;color:#51515f">Осінній семестр 2026/27 · 30 кредитів ECTS · поточні бали станом на 29 вересня</p>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:24px">
+<sc-for list="{{courses}}" as="co" hint-placeholder-count="6">
+<div style="background:#fafafd;border-radius:24px;box-shadow:0 2px 24px rgba(26,26,46,0.1);padding:24px;display:flex;flex-direction:column;gap:16px">
+<div class="{{co.tone}}" style="width:58px;height:58px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+<span style="font-size:22px;line-height:24px;font-weight:700">{{co.cr}}</span>
+<span style="font-size:11px;line-height:14px;font-weight:600">кредитів</span>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px">
+<div style="font-size:17px;line-height:24px;font-weight:700;color:#1a1a2e">{{co.name}}</div>
+<div style="font-size:14px;line-height:22px;color:#51515f">{{co.teacher}}</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:1px solid #ebecef">
+<div style="display:flex;justify-content:space-between;gap:8px;font-size:14px;line-height:20px;color:#51515f"><span>Поточні бали</span><span style="font-weight:700;color:#1a1a2e">{{co.score}} із {{co.max}}</span></div>
+<div style="height:8px;border-radius:9999px;background:#eaeaed"><div style="height:8px;border-radius:9999px;background:#e30613;width:{{co.w}}"></div></div>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<span class="pill pill-dark">{{co.ctrl}}</span>
+<span class="pill pill-line">{{co.next}}</span>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- ---------- ОПЛАТА ---------- -->
+<sc-if value="{{tabPay}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+<h1 style="margin:0;font-size:34px;line-height:42px;font-weight:700;letter-spacing:-0.01em;color:#e30613">Оплата навчання</h1>
+<p style="margin:0;font-size:16px;line-height:24px;color:#51515f">Договір № 24-0417/К від 20.08.2024 · вартість навчального року 58 000 ₴</p>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:24px">
+<div style="background:#fafafd;border-radius:20px;box-shadow:0 2px 24px rgba(26,26,46,0.1);padding:24px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center">
+<div class="tile-neutral" style="width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4M3 5v14a2 2 0 0 0 2 2h16v-5M18 12a2 2 0 0 0 0 4h4v-4z"></path></svg></div>
+<div style="font-size:38px;line-height:44px;font-weight:700;color:#1a1a2e">29 000 ₴</div>
+<div style="font-size:14px;line-height:20px;color:#6b7280">Вартість осіннього семестру</div>
+</div>
+<div style="background:#fafafd;border-radius:20px;box-shadow:0 2px 24px rgba(26,26,46,0.1);padding:24px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center">
+<div class="tile-tint" style="width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></div>
+<div style="font-size:38px;line-height:44px;font-weight:700;color:#1a1a2e">15 000 ₴</div>
+<div style="font-size:14px;line-height:20px;color:#6b7280">Сплачено 28.08.2026</div>
+</div>
+<div style="background:#fafafd;border-radius:20px;box-shadow:0 2px 24px rgba(26,26,46,0.1);padding:24px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center">
+<div class="tile-neutral" style="width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v16H4zM4 10h16M8 3v4M16 3v4"></path></svg></div>
+<div style="font-size:38px;line-height:44px;font-weight:700;color:#1a1a2e">14 000 ₴</div>
+<div style="font-size:14px;line-height:20px;color:#6b7280">До сплати до 15.10.2026</div>
+</div>
+</div>
+<section style="background:#fafafd;border-radius:24px;box-shadow:0 2px 24px rgba(26,26,46,0.1);padding:24px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:15px;line-height:22px;color:#51515f"><span>Оплачено за семестр</span><span style="font-weight:700;color:#1a1a2e">52%</span></div>
+<div style="height:12px;border-radius:9999px;background:#eaeaed"><div style="height:12px;border-radius:9999px;background:linear-gradient(135deg,#e30613,#bd0511);width:52%"></div></div>
+<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-top:8px">
+<button class="btn" type="button" onClick="{{payNow}}">Оплатити 14 000 ₴</button>
+<sc-if value="{{payNote}}" hint-placeholder-val="{{ false }}"><span style="font-size:14px;line-height:22px;color:#4b5563">Демо-режим: платіжний шлюз у прототипі не підключено.</span></sc-if>
+</div>
+</section>
+<section style="background:#fafafd;border-radius:24px;box-shadow:0 2px 24px rgba(26,26,46,0.1);padding:24px;display:flex;flex-direction:column;gap:8px;overflow-x:auto">
+<h2 style="margin:0;font-size:24px;line-height:32px;font-weight:600;color:#1a1a2e;padding-bottom:8px">Графік платежів і історія</h2>
+<div style="min-width:640px;display:grid;grid-template-columns:110px minmax(0,1fr) 120px 132px;gap:16px;align-items:center;padding:8px 0;font-size:12px;line-height:16px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#4b5563">
+<span>Дата</span><span>Призначення</span><span>Сума</span><span>Статус</span>
+</div>
+<sc-for list="{{payments}}" as="p" hint-placeholder-count="6">
+<div style="min-width:640px;display:grid;grid-template-columns:110px minmax(0,1fr) 120px 132px;gap:16px;align-items:center;padding:14px 0;border-top:1px solid #ebecef">
+<span style="font-size:14px;line-height:22px;color:#51515f">{{p.date}}</span>
+<span style="font-size:15px;line-height:22px;font-weight:600;color:#1a1a2e">{{p.title}}</span>
+<span style="font-size:15px;line-height:22px;font-weight:700;color:#1a1a2e">{{p.amount}}</span>
+<span class="{{p.pillCls}}">{{p.status}}</span>
+</div>
+</sc-for>
+</section>
+</div>
+</sc-if>
+
+<!-- ---------- ДОКУМЕНТИ ---------- -->
+<sc-if value="{{tabDocs}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+<h1 style="margin:0;font-size:34px;line-height:42px;font-weight:700;letter-spacing:-0.01em;color:#e30613">Документи</h1>
+<p style="margin:0;font-size:16px;line-height:24px;color:#51515f">Замовляйте довідки онлайн — готовий документ надійде на пошту й у кабінет</p>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:24px">
+<sc-for list="{{docs}}" as="dc" hint-placeholder-count="3">
+<div style="background:#fafafd;border-radius:24px;box-shadow:0 2px 24px rgba(26,26,46,0.1);padding:24px;display:flex;flex-direction:column;gap:16px">
+<div class="{{dc.tone}}" style="width:58px;height:58px;border-radius:16px;display:flex;align-items:center;justify-content:center">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l5 5v13H6zM14 3v5h5M9 13h6M9 17h6"></path></svg>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px;flex-grow:1">
+<div style="font-size:17px;line-height:24px;font-weight:700;color:#1a1a2e">{{dc.title}}</div>
+<div style="font-size:14px;line-height:22px;color:#51515f">{{dc.text}}</div>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:16px;border-top:1px solid #ebecef">
+<span style="font-size:13px;line-height:18px;color:#6b7280">{{dc.term}}</span>
+<sc-if value="{{dc.free}}" hint-placeholder-val="{{ true }}"><button class="btn-ghost" type="button" onClick="{{dc.order}}">Замовити</button></sc-if>
+<sc-if value="{{dc.done}}" hint-placeholder-val="{{ false }}"><span class="pill pill-brand">Запит створено</span></sc-if>
+</div>
+</div>
+</sc-for>
+</div>
+<section style="background:#fafafd;border-radius:24px;box-shadow:0 2px 24px rgba(26,26,46,0.1);padding:24px;display:flex;flex-direction:column;gap:8px">
+<h2 style="margin:0;font-size:24px;line-height:32px;font-weight:600;color:#1a1a2e;padding-bottom:8px">Історія запитів</h2>
+<sc-for list="{{history}}" as="h" hint-placeholder-count="4">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0;border-top:1px solid #ebecef">
+<div style="min-width:0">
+<div style="font-size:15px;line-height:22px;font-weight:600;color:#1a1a2e">{{h.title}}</div>
+<div style="font-size:14px;line-height:22px;color:#51515f">{{h.date}}</div>
+</div>
+<span class="{{h.pillCls}}">{{h.status}}</span>
+</div>
+</sc-for>
+</section>
+</div>
+</sc-if>
+
+<!-- ---------- ПРОФІЛЬ ---------- -->
+<sc-if value="{{tabProfile}}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center">
+<h1 style="margin:0;font-size:34px;line-height:42px;font-weight:700;letter-spacing:-0.01em;color:#e30613">Профіль студента</h1>
+<p style="margin:0;font-size:16px;line-height:24px;color:#51515f">Особисті дані та інформація про навчання</p>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<aside style="flex:1 1 320px;max-width:400px;box-sizing:border-box;position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(135deg,#22222a,#0d0d12);color:#ffffff;padding:32px;display:flex;flex-direction:column;gap:24px;box-shadow:0 2px 24px rgba(26,26,46,0.1)">
+<div style="position:absolute;top:0;left:0;right:0;height:4px;background:#e30613"></div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+<span style="font-size:11px;line-height:16px;font-weight:600;letter-spacing:0.06em;color:rgba(255,255,255,0.75)">СТУДЕНТСЬКИЙ КВИТОК</span>
+<span style="font-size:14px;font-weight:700">ПД</span>
+</div>
+<div class="tile-brand" style="width:96px;height:96px;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:800;letter-spacing:0.02em">ДМ</div>
+<div style="display:flex;flex-direction:column;gap:4px">
+<div style="font-size:24px;line-height:32px;font-weight:700">Мельниченко Данило Андрійович</div>
+<div style="font-size:14px;line-height:22px;color:rgba(255,255,255,0.75)">Факультет інформаційних технологій</div>
+</div>
+<div style="display:flex;gap:32px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.18)">
+<div><div style="font-size:11px;line-height:16px;letter-spacing:0.06em;color:rgba(255,255,255,0.75)">НОМЕР</div><div style="font-size:15px;line-height:22px;font-weight:600">24-0417</div></div>
+<div><div style="font-size:11px;line-height:16px;letter-spacing:0.06em;color:rgba(255,255,255,0.75)">ГРУПА</div><div style="font-size:15px;line-height:22px;font-weight:600">КН-34</div></div>
+<div><div style="font-size:11px;line-height:16px;letter-spacing:0.06em;color:rgba(255,255,255,0.75)">ДІЙСНИЙ ДО</div><div style="font-size:15px;line-height:22px;font-weight:600">30.06.2028</div></div>
+</div>
+</aside>
+<div style="flex:2 1 520px;display:flex;flex-direction:column;gap:24px">
+<sc-for list="{{profile}}" as="g" hint-placeholder-count="3">
+<section style="background:#fafafd;border-radius:24px;box-shadow:0 2px 24px rgba(26,26,46,0.1);padding:24px;display:flex;flex-direction:column;gap:8px">
+<h2 style="margin:0;font-size:24px;line-height:32px;font-weight:600;color:#1a1a2e;padding-bottom:8px">{{g.title}}</h2>
+<sc-for list="{{g.rows}}" as="rw" hint-placeholder-count="4">
+<div style="display:flex;flex-wrap:wrap;gap:8px 24px;padding:12px 0;border-top:1px solid #ebecef">
+<div style="flex:1 1 180px;font-size:14px;line-height:22px;color:#6b7280">{{rw.k}}</div>
+<div style="flex:2 1 260px;font-size:15px;line-height:22px;font-weight:500;color:#1a1a2e">{{rw.v}}</div>
+</div>
+</sc-for>
+</section>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+</main>
+
+<footer style="margin-top:48px;text-align:center;font-size:13px;line-height:20px;color:#4b5563">© 2026 Політех-Дніпро · вигаданий університет, прототип кабінету студента</footer>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { authed: false, tab: 'home', day: 1, sem: 4, notif: false, reqs: [], payNote: false };
+  }
+
+  data() {
+    return {
+      bells: [
+        { n: 1, s: '08:30', e: '10:05' },
+        { n: 2, s: '10:25', e: '12:00' },
+        { n: 3, s: '12:20', e: '13:55' },
+        { n: 4, s: '14:15', e: '15:50' },
+        { n: 5, s: '16:10', e: '17:45' }
+      ],
+      kindCls: { 'Лекція': 'pill pill-dark', 'Лабораторна': 'pill pill-brand', 'Практика': 'pill pill-neutral' },
+      week: [
+        { wd: 'Пн', date: '28', title: 'Понеділок, 28 вересня', classes: [
+          { n: 1, subject: 'Машинне навчання', kind: 'Лекція', room: '412', teacher: 'проф. Шевченко І. В.' },
+          { n: 2, subject: 'Бази даних та інформаційні системи', kind: 'Лекція', room: '305', teacher: 'проф. Ковальчук О. М.' },
+          { n: 3, subject: 'Англійська мова за проф. спрямуванням', kind: 'Практика', room: '218', teacher: 'ст. викл. Лисенко Н. А.' }
+        ] },
+        { wd: 'Вт', date: '29', title: 'Вівторок, 29 вересня', classes: [
+          { n: 1, subject: 'Операційні системи', kind: 'Лекція', room: '301', teacher: 'доц. Бондаренко Т. С.' },
+          { n: 2, subject: "Комп'ютерні мережі", kind: 'Лабораторна', room: '118', teacher: 'доц. Гриценко В. П.' },
+          { n: 3, subject: 'Веб-технології', kind: 'Практика', room: '214', teacher: 'ст. викл. Мороз А. Д.' }
+        ] },
+        { wd: 'Ср', date: '30', title: 'Середа, 30 вересня', classes: [
+          { n: 2, subject: 'Бази даних та інформаційні системи', kind: 'Лабораторна', room: '120', teacher: 'проф. Ковальчук О. М.' },
+          { n: 3, subject: 'Машинне навчання', kind: 'Практика', room: '410', teacher: 'проф. Шевченко І. В.' },
+          { n: 4, subject: 'Веб-технології', kind: 'Лабораторна', room: '214', teacher: 'ст. викл. Мороз А. Д.' }
+        ] },
+        { wd: 'Чт', date: '1', title: 'Четвер, 1 жовтня', classes: [
+          { n: 1, subject: "Комп'ютерні мережі", kind: 'Лекція', room: '301', teacher: 'доц. Гриценко В. П.' },
+          { n: 2, subject: 'Операційні системи', kind: 'Лабораторна', room: '118', teacher: 'доц. Бондаренко Т. С.' },
+          { n: 3, subject: 'Веб-технології', kind: 'Лекція', room: '305', teacher: 'ст. викл. Мороз А. Д.' }
+        ] },
+        { wd: 'Пт', date: '2', title: "П'ятниця, 2 жовтня", classes: [
+          { n: 2, subject: 'Англійська мова за проф. спрямуванням', kind: 'Практика', room: '218', teacher: 'ст. викл. Лисенко Н. А.' },
+          { n: 3, subject: 'Бази даних та інформаційні системи', kind: 'Практика', room: '120', teacher: 'проф. Ковальчук О. М.' }
+        ] }
+      ],
+      sems: [
+        { label: 'Семестр 1', title: 'Семестр 1 · Осінь 2024/25', rows: [
+          ['Вища математика', 'Іспит', 6, 88], ['Програмування (Python)', 'Іспит', 6, 95], ['Дискретна математика', 'Іспит', 5, 84],
+          ['Історія України', 'Залік', 4, 78], ['Англійська мова', 'Залік', 4, 91], ['Фізика', 'Іспит', 5, 72] ] },
+        { label: 'Семестр 2', title: 'Семестр 2 · Весна 2024/25', rows: [
+          ['Вища математика 2', 'Іспит', 5, 86], ["Об'єктно-орієнтоване програмування", 'Іспит', 6, 94], ["Архітектура комп'ютера", 'Іспит', 5, 81],
+          ['Філософія', 'Залік', 4, 89], ['Англійська мова', 'Залік', 4, 92], ['Лінійна алгебра', 'Іспит', 6, 90] ] },
+        { label: 'Семестр 3', title: 'Семестр 3 · Осінь 2025/26', rows: [
+          ['Алгоритми та структури даних', 'Іспит', 6, 92], ['Теорія ймовірностей', 'Іспит', 5, 79], ["Комп'ютерна графіка", 'Залік', 5, 90],
+          ['Системний аналіз', 'Іспит', 5, 85], ['Англійська мова', 'Залік', 4, 93], ['Навчальна практика', 'Залік', 5, 97] ] },
+        { label: 'Семестр 4', title: 'Семестр 4 · Весна 2025/26', rows: [
+          ['Математична статистика', 'Іспит', 5, 83], ['Патерни проєктування', 'Іспит', 6, 96], ['Програмування на C++', 'Іспит', 6, 87],
+          ['Теорія автоматів і формальні мови', 'Іспит', 5, 80], ['Соціологія', 'Залік', 4, 85], ['Англійська мова', 'Залік', 4, 94] ] }
+      ],
+      courses: [
+        { name: 'Бази даних та інформаційні системи', teacher: 'проф. Ковальчук Олег Миколайович', cr: 6, ctrl: 'Іспит', score: 34, max: 40, next: 'Лаб. №3 · 2 жовтня' },
+        { name: 'Операційні системи', teacher: 'доц. Бондаренко Тетяна Сергіївна', cr: 5, ctrl: 'Іспит', score: 28, max: 35, next: 'Тест · 9 жовтня' },
+        { name: 'Машинне навчання', teacher: 'проф. Шевченко Ігор Валентинович', cr: 6, ctrl: 'Іспит', score: 31, max: 35, next: 'Практична №2 · 13 жовтня' },
+        { name: "Комп'ютерні мережі", teacher: 'доц. Гриценко Віктор Петрович', cr: 4, ctrl: 'Залік', score: 25, max: 30, next: 'Лаб. №2 · 8 жовтня' },
+        { name: 'Веб-технології', teacher: 'ст. викл. Мороз Андрій Дмитрович', cr: 5, ctrl: 'Залік', score: 29, max: 30, next: 'Мініпроєкт · 20 жовтня' },
+        { name: 'Англійська мова за проф. спрямуванням', teacher: 'ст. викл. Лисенко Наталія Анатоліївна', cr: 4, ctrl: 'Залік', score: 22, max: 25, next: 'Есе · 6 жовтня' }
+      ],
+      deadlines: [
+        { day: '2', month: 'жов', title: 'Лабораторна №3', sub: 'Бази даних · нормалізація схеми', tone: 'tile-brand' },
+        { day: '6', month: 'жов', title: 'Есе «AI in Software Engineering»', sub: 'Англійська мова', tone: 'tile-dark' },
+        { day: '9', month: 'жов', title: 'Проміжний тест', sub: 'Операційні системи', tone: 'tile-brand' },
+        { day: '15', month: 'жов', title: 'Другий внесок за навчання', sub: '14 000 ₴', tone: 'tile-graphite' }
+      ],
+      news: [
+        { date: '28 вересня', title: 'Змінено час консультації з операційних систем', text: 'Консультація перед проміжним тестом відбудеться в четвер о 14:15 в ауд. 301.' },
+        { date: '25 вересня', title: 'Відкрито запис на вибіркові дисципліни 2027/28', text: 'Обрати дисципліни можна до 31 жовтня в розділі «Дисципліни».' },
+        { date: '24 вересня', title: 'Нагадування про другий внесок за навчання', text: 'Сплатіть 14 000 ₴ до 15 жовтня 2026 року згідно з графіком платежів.' },
+        { date: '22 вересня', title: 'Студентська наукова конференція', text: 'Приймаємо тези доповідей до 20 жовтня. Тематика — дані, ШІ та кібербезпека.' }
+      ],
+      payments: [
+        { date: '15.03.2027', title: 'Навчання, 2 семестр 2026/27 — 2-й внесок', amount: '14 000 ₴', st: 'plan' },
+        { date: '26.01.2027', title: 'Навчання, 2 семестр 2026/27 — 1-й внесок', amount: '15 000 ₴', st: 'plan' },
+        { date: '15.10.2026', title: 'Навчання, 1 семестр 2026/27 — 2-й внесок', amount: '14 000 ₴', st: 'due' },
+        { date: '28.08.2026', title: 'Навчання, 1 семестр 2026/27 — 1-й внесок', amount: '15 000 ₴', st: 'paid' },
+        { date: '12.02.2026', title: 'Навчання, 2 семестр 2025/26', amount: '26 000 ₴', st: 'paid' },
+        { date: '28.08.2025', title: 'Навчання, 1 семестр 2025/26', amount: '26 000 ₴', st: 'paid' }
+      ],
+      docs: [
+        { id: 'study', title: 'Довідка про навчання', text: 'Підтверджує статус студента — для роботодавця, банку чи ЦНАП.', term: 'до 1 робочого дня' },
+        { id: 'grades', title: 'Витяг із залікової книжки', text: 'Оцінки за всі завершені семестри з кредитами ECTS.', term: 'до 2 робочих днів' },
+        { id: 'military', title: 'Довідка для військового обліку', text: 'Для оформлення й оновлення військово-облікових документів.', term: 'до 1 робочого дня' }
+      ],
+      pastDocs: [
+        { title: 'Довідка про навчання', date: '02.09.2026' },
+        { title: 'Витяг із залікової книжки', date: '15.06.2026' },
+        { title: 'Довідка про навчання', date: '29.01.2026' }
+      ],
+      profile: [
+        { title: 'Особисті дані', rows: [
+          { k: 'ПІБ', v: 'Мельниченко Данило Андрійович' },
+          { k: 'Дата народження', v: '14.03.2006' },
+          { k: 'Громадянство', v: 'Україна' },
+          { k: 'Адреса проживання', v: "м. Дніпро, вул. Гагаріна, 24, кв. 17" }
+        ] },
+        { title: 'Контакти', rows: [
+          { k: 'Електронна пошта', v: 'd.melnychenko@polytech.edu.ua' },
+          { k: 'Телефон', v: '+380 67 555 01 42' }
+        ] },
+        { title: 'Навчання', rows: [
+          { k: 'Факультет', v: 'Інформаційних технологій' },
+          { k: 'Спеціальність', v: "122 «Комп'ютерні науки»" },
+          { k: 'Освітня програма', v: '«Інженерія даних та штучний інтелект»' },
+          { k: 'Рівень, форма', v: 'Бакалавр · денна · контракт' },
+          { k: 'Курс, група', v: '3 курс, КН-34' },
+          { k: 'Куратор групи', v: 'доц. Сидоренко Олена Вікторівна' },
+          { k: 'Зарахований', v: '01.09.2024 (наказ № 214-с від 28.08.2024)' },
+          { k: 'Завершення навчання', v: '30.06.2028' }
+        ] }
+      ]
+    };
+  }
+
+  grade(score) {
+    if (score >= 90) return { l: 'A', w: 'Відмінно' };
+    if (score >= 82) return { l: 'B', w: 'Дуже добре' };
+    if (score >= 74) return { l: 'C', w: 'Добре' };
+    if (score >= 64) return { l: 'D', w: 'Задовільно' };
+    return { l: 'E', w: 'Достатньо' };
+  }
+
+  fmt(n) {
+    return n.toFixed(1).replace('.', ',');
+  }
+
+  renderVals() {
+    const D = this.D || (this.D = this.data());
+    const s = this.state;
+    const go = (t) => () => this.setState({ tab: t, notif: false });
+
+    const tabs = [['home', 'Головна'], ['schedule', 'Розклад'], ['grades', 'Успішність'], ['courses', 'Дисципліни'], ['pay', 'Оплата'], ['docs', 'Документи']];
+    const nav = tabs.map((t) => ({
+      label: t[1],
+      cls: s.tab === t[0] ? 'nav on' : 'nav',
+      current: s.tab === t[0] ? 'page' : 'false',
+      go: go(t[0])
+    }));
+
+    const withTimes = (c) => ({
+      n: c.n,
+      subject: c.subject,
+      kind: c.kind,
+      room: c.room,
+      teacher: c.teacher,
+      s: D.bells[c.n - 1].s,
+      e: D.bells[c.n - 1].e,
+      meta: c.kind + ' · ауд. ' + c.room + ' · ' + c.teacher,
+      pillCls: D.kindCls[c.kind]
+    });
+    const todayIdx = 1;
+    const days = D.week.map((w, i) => ({
+      wd: w.wd,
+      date: w.date,
+      count: w.classes.length + ' пари',
+      cls: s.day === i ? 'day on' : 'day',
+      pick: () => this.setState({ day: i })
+    }));
+    const dayData = D.week[s.day];
+    const dayClasses = dayData.classes.map(withTimes);
+
+    const allScores = [];
+    D.sems.forEach((sm) => sm.rows.forEach((r) => allScores.push(r[3])));
+    const avgAll = allScores.reduce((a, b) => a + b, 0) / allScores.length;
+    const sd = D.sems[s.sem - 1];
+    const semScores = sd.rows.map((r) => r[3]);
+    const semAvg = semScores.reduce((a, b) => a + b, 0) / semScores.length;
+    const semRows = sd.rows.map((r) => {
+      const g = this.grade(r[3]);
+      return { name: r[0], ctrl: r[1], cr: r[2], score: r[3], l: g.l, w: g.w, pillCls: r[3] >= 90 ? 'pill pill-dark' : 'pill pill-neutral' };
+    });
+
+    const icon = {
+      star: 'M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z',
+      book: 'M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z',
+      cal: 'M4 5h16v16H4zM4 10h16M8 3v4M16 3v4M9 15l2 2 4-4',
+      wallet: 'M21 12V7H5a2 2 0 0 1 0-4h14v4M3 5v14a2 2 0 0 0 2 2h16v-5M18 12a2 2 0 0 0 0 4h4v-4z'
+    };
+
+    const courseTones = ['tile-brand', 'tile-dark', 'tile-brand', 'tile-graphite', 'tile-brand', 'tile-dark'];
+    const courses = D.courses.map((c, i) => ({
+      name: c.name, teacher: c.teacher, cr: c.cr, ctrl: c.ctrl, score: c.score, max: c.max, next: c.next,
+      w: Math.round(c.score / c.max * 100) + '%',
+      tone: courseTones[i % courseTones.length]
+    }));
+
+    const payMap = {
+      paid: { status: 'Сплачено', pillCls: 'pill pill-neutral' },
+      due: { status: 'До сплати', pillCls: 'pill pill-brand' },
+      plan: { status: 'Заплановано', pillCls: 'pill pill-line' }
+    };
+    const payments = D.payments.map((p) => ({ date: p.date, title: p.title, amount: p.amount, status: payMap[p.st].status, pillCls: payMap[p.st].pillCls }));
+
+    const docTones = ['tile-brand', 'tile-dark', 'tile-graphite'];
+    const docs = D.docs.map((d, i) => {
+      const done = s.reqs.indexOf(d.id) >= 0;
+      return {
+        title: d.title, text: d.text, term: d.term,
+        tone: docTones[i % docTones.length],
+        done: done,
+        free: !done,
+        order: () => this.setState({ reqs: s.reqs.concat([d.id]) })
+      };
+    });
+    const newReqs = s.reqs.slice().reverse().map((id) => {
+      const d = D.docs.filter((x) => x.id === id)[0];
+      return { title: d.title, date: '29.09.2026', status: 'В обробці', pillCls: 'pill pill-brand' };
+    });
+    const history = newReqs.concat(D.pastDocs.map((h) => ({ title: h.title, date: h.date, status: 'Готово', pillCls: 'pill pill-neutral' })));
+
+    return {
+      authed: s.authed,
+      loggedOut: !s.authed,
+      login: (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        this.setState({ authed: true, tab: 'home', notif: false });
+      },
+      logout: () => this.setState({ authed: false, tab: 'home', notif: false }),
+      nav: nav,
+      tabHome: s.tab === 'home',
+      tabSchedule: s.tab === 'schedule',
+      tabGrades: s.tab === 'grades',
+      tabCourses: s.tab === 'courses',
+      tabPay: s.tab === 'pay',
+      tabDocs: s.tab === 'docs',
+      tabProfile: s.tab === 'profile',
+      goProfile: go('profile'),
+      goSchedule: go('schedule'),
+      notif: s.notif,
+      toggleNotif: () => this.setState({ notif: !s.notif }),
+      news: D.news,
+      newsCount: String(D.news.length),
+      stats: [
+        { icon: icon.star, value: this.fmt(avgAll), label: 'Середній бал', tone: 'tile-tint' },
+        { icon: icon.book, value: '120 / 240', label: 'Кредити ECTS', tone: 'tile-neutral' },
+        { icon: icon.cal, value: '94%', label: 'Відвідуваність', tone: 'tile-tint' },
+        { icon: icon.wallet, value: '14 000 ₴', label: 'Наступний платіж до 15.10', tone: 'tile-neutral' }
+      ],
+      todayClasses: D.week[todayIdx].classes.map(withTimes),
+      deadlines: D.deadlines,
+      days: days,
+      dayTitle: dayData.title,
+      dayIsToday: s.day === todayIdx,
+      dayClasses: dayClasses,
+      dayEmpty: dayClasses.length === 0,
+      bells: D.bells,
+      gstats: [
+        { icon: icon.star, value: this.fmt(avgAll), label: 'Середній бал за 4 семестри', tone: 'tile-tint' },
+        { icon: icon.book, value: '120', label: 'Кредитів ECTS із 240', tone: 'tile-neutral' },
+        { icon: icon.cal, value: '4', label: 'Семестри завершено', tone: 'tile-tint' }
+      ],
+      sems: D.sems.map((sm, i) => ({
+        label: sm.label,
+        cls: s.sem === i + 1 ? 'chipbtn on' : 'chipbtn',
+        pick: () => this.setState({ sem: i + 1 })
+      })),
+      semTitle: sd.title,
+      semAvg: this.fmt(semAvg),
+      semCredits: String(sd.rows.reduce((a, r) => a + r[2], 0)),
+      semRows: semRows,
+      courses: courses,
+      payments: payments,
+      payNote: s.payNote,
+      payNow: () => this.setState({ payNote: true }),
+      docs: docs,
+      history: history,
+      profile: D.profile
+    };
+  }
+}
+</script>
+</body>
+</html>
