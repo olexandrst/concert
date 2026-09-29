@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1280">
+<title>Кабінет студента</title>
+<meta name="description" content="Прототип кабінету студента вигаданого університету «Політех-Дніпро»">
+<style>body{margin:0;background:#f3f4f8;font-family:system-ui,sans-serif}</style>
+</head>
+<body>
+<div id="app"></div>
+<noscript>Для роботи прототипу потрібен JavaScript.</noscript>
+<script src="dc-lite.js"></script>
+<script>
+DCLite.mount('app.dc.html', document.getElementById('app')).catch(function (e) {
+  document.getElementById('app').textContent = 'Не вдалося завантажити застосунок: ' + e.message;
+});
+</script>
+</body>
+</html>
